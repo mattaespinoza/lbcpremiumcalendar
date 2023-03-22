@@ -104,10 +104,10 @@
                 <div>
                   <div className="mt-2  inline-block">
                     <div className="font-bold inline-block text-calendarblue">
-                      Date/Time:
+                      Date
                     </div>
                     <div className="inline-block  ml-2 font-normal text-black">
-                      { format(parse(event.start_date,  "yyyy-MM-dd", new Date()),'MM/dd/yyyy')} at @ {event.start_time}
+                      { format(parse(event.start_date,  "yyyy-MM-dd", new Date()),'MM/dd/yyyy')} 
                     </div>
                   </div>
                   <div className="block">
