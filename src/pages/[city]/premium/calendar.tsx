@@ -8,6 +8,7 @@ import { compareAsc, format, endOfDay, getDaysInMonth } from "date-fns";
 import { useUser } from '@supabase/auth-helpers-react'
 import { supabase } from '../../../../utils/supbaseClient'
 
+import Image from 'next/image'
 
 
 
@@ -32,6 +33,8 @@ const PremiumCalendar: NextPage<Props> = (props) => {
 
           <div className="bg-gray-200">
             <div className="xl:w-10/12 m-auto border-2">
+
+              <Image className='m-auto mt-4' alt="logo of amana heating and air conditioning" width={400} height={400} src={"https://dl.airtable.com/.attachments/90d5dfdb12372a248362e04f84587cb8/68576cad/amanaad.jpeg"}/>
               <Calendar events={events} city={city} />
             </div>
           </div>
