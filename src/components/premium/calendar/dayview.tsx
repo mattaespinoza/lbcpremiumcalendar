@@ -3,8 +3,8 @@
 
   import format from "date-fns/format";
   import parse from "date-fns/parse";
-import { ChevronDown, ChevronLeft, ChevronRight } from 'heroicons-react';
-
+import { ChevronDown, ChevronLeft, ChevronRight, Filter } from 'heroicons-react';
+import Filters from '@/components/premium/calendar/filters';
 interface Props {
     events: any;
     date: any;
@@ -51,8 +51,10 @@ interface Props {
       
     }
     return (
-      <>          <button onClick={()=>sendEmail()} className="bg-calendarblue text-white w-44 p-2 rounded m-2 "> Send Selected Events</button>
 
+      <><div className='grid grid-cols-3'><button onClick={()=>sendEmail()} className="bg-calendarblue text-white text-sm rounded m-2 col-span-1 p-2 lg:w-40 h-1/2 m-auto "> Send Selected Events</button>
+        <div className='col-span-2'><Filters/></div>
+        </div>  
         <div className="text-center bg-calendarblue  p-2 font-bold text-white md:mb-8 mb-2 ">
           <button
             type="button"
