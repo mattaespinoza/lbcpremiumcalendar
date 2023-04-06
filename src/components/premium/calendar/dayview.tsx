@@ -50,10 +50,10 @@ interface Props {
       )
       
     }
-    return (
-
-      <><div className='grid grid-cols-3'><button onClick={()=>sendEmail()} className="bg-calendarblue text-white text-sm rounded m-2 col-span-1 p-2 lg:w-40 h-1/2 m-auto "> Send Selected Events</button>
-        <div className='col-span-2'><Filters/></div>
+    return (  
+      // need to fix this add h-1/2 and get rid of m-8 when you add filters back
+      <><div className='grid grid-cols-3'><button onClick={()=>sendEmail()} className="bg-calendarblue text-white text-sm rounded m-2 col-span-1 p-2 lg:w-40  m-8 m-auto "> Send Selected Events</button>
+        {/*<div className='col-span-2'><Filters/></div>*/}
         </div>  
         <div className="text-center bg-calendarblue  p-2 font-bold text-white md:mb-8 mb-2 ">
           <button
