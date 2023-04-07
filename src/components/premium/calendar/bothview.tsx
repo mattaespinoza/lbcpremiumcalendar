@@ -292,7 +292,7 @@ interface Props {
             <>
             <div className="text-center bg-calendarblue  p-2 font-bold text-white md:mb-8 mb-2 ">
             <div className="inline-block ml-2 mr-2 text-xl md:text-2xl w-72 md:w-96">
-            There's no events for this date {format(new Date(),'MM/dd/yyyy')}
+            There&apos;s no events for this date {format(new Date(),'MM/dd/yyyy')}
             </div></div>
             </>
 
