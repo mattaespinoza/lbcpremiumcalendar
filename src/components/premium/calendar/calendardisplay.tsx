@@ -26,7 +26,11 @@ import {
 
 
   interface Props {
-    ActiveMonth:any,ChangeMonth:any,shortWeekDaysArray:any,StartofMonth:any,ChangeDate:any,events:any
+    ActiveMonth:any,ChangeMonth:any,shortWeekDaysArray:any,StartofMonth:any,ChangeDate:any,events:any;
+    MainDate:any;
+    setMainDate:any;
+    setDayorWeek:any;
+    
 }
 
 export default function CalendarDisplay(props:any) {
@@ -38,9 +42,15 @@ export default function CalendarDisplay(props:any) {
     var StartofMonth=props.StartofMonth
     var ChangeDate=props.ChangeDate
     var events=props.events
+    var MainDate = props.MainDate
+    var setMainDate = props.setMainDate
+  var setDayorWeek = props.setDayorWeek
 
-    console.log(ActiveMonth)
 
+      function runDates(date:any){
+        setMainDate( new Date(date))
+        setDayorWeek('Day')
+      }
 
     useEffect(() => {
 
@@ -72,7 +82,6 @@ export default function CalendarDisplay(props:any) {
           Events: numofevents.length,
         });
       }
-      {console.log(days)}
       setDates(days);
 
     }
@@ -110,7 +119,7 @@ export default function CalendarDisplay(props:any) {
                         className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-calendarblue hover:text-gray-500"
                     >
                         <span className="sr-only">Previous month</span>
-                        <ChevronLeft onClick={()=>ChangeMonth('subtract')} className="h-5 w-5" aria-hidden="true" />
+                        <ChevronLeft  className="h-5 w-5" aria-hidden="true" />
                     </button>
                     <div className="flex-auto font-semibold text-black">{format(ActiveMonth,'MMMM y')}</div>
                     <button
@@ -118,7 +127,7 @@ export default function CalendarDisplay(props:any) {
                         className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-calendarblue hover:text-gray-500"
                     >
                         <span className="sr-only">Next month</span>
-                        <ChevronRight onClick={()=>ChangeMonth('add')}  className="h-5 w-5" aria-hidden="true" />
+                        <ChevronRight  className="h-5 w-5" aria-hidden="true" />
                     </button>
                     </div>
                     <div className="mt-6 grid grid-cols-7 text-center text-xs leading-6 text-gray-500">
@@ -157,7 +166,8 @@ export default function CalendarDisplay(props:any) {
                             dayIdx === Dates.length - 7 && 'rounded-bl-lg',
                             dayIdx === Dates.length - 1 && 'rounded-br-lg'
                         )}
-                        onClick={()=>ChangeDate( new Date(day.date))}
+                        onClick={()=>runDates(day.date)}
+
                         >
                         <time
                             dateTime={day.date}

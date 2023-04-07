@@ -41,18 +41,45 @@ function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
+
 interface Props {
+  setCurrentFilters:any;
+  CurrentFilters:any;
 
 
+}
 
-  }
-  
+
 
   export default function Filters(props:any) 
     {
         const [open, setOpen] = useState(false)
+        var setCurrentFilters=props.setCurrentFilters
+        var CurrentFilters=props.CurrentFilters
 
 
+        function runFilter(name:any,value:any,type:any){
+          if(value == true){
+          var CFilter = CurrentFilters 
+         CFilter.push({name:name,type:type})
+          console.log(name)
+        setCurrentFilters([...CFilter])          
+          }
+
+
+          else if(value == false){
+            var CFilter = CurrentFilters
+            
+            console.log(name)
+           const index = CFilter.map((e:any) => e.name).indexOf(name);
+
+            if (index > -1) { // only splice array when item is found
+              CFilter.splice(index, 1); // 2nd parameter means remove one item only
+            }
+            setCurrentFilters([...CFilter])          
+            }
+            console.log(CFilter,'hold')
+        }
 
       return (
         <> 
@@ -204,7 +231,7 @@ interface Props {
                   className="relative inline-block text-left"
                 >
                   <div>
-                    <Popover.Button className="group inline-flex items-center justify-center text-base font-medium text-white hover:text-white p bg-calendarblue rounded-lg">
+                    <Popover.Button className="group inline-flex items-center justify-center text-base font-medium text-white hover:text-white p bg-calendarblue rounded-lg p-2">
                       <span>{section.name}</span>
 
                       <ChevronDownIcon
@@ -213,7 +240,6 @@ interface Props {
                       />
                     </Popover.Button>
                   </div>
-
                   <Transition
                     as={Fragment}
                     enter="transition ease-out duration-100"
@@ -232,7 +258,8 @@ interface Props {
                               name={`${section.id}[]`}
                               defaultValue={option.value}
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-calendarblue focus:ring-litecalendarbluex"
+                              className="h-4 w-4 rounded border-gray-300 text-calendarblue focus:ring-litecalendarblue"
+                              onClick={(e:any)=>(runFilter(option.value, e.target.checked,section.name))}
                             />
                             <label
                               htmlFor={`filter-${section.id}-${optionIdx}`}
