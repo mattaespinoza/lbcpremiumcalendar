@@ -16,7 +16,9 @@ import {
   getDaysInMonth,
   startOfMonth,
   startOfISOWeek,
+  endOfISOWeek,
   addDays,
+  addWeeks,
   setDate,
   getMonth,
   getYear,
@@ -45,7 +47,7 @@ interface Props {
     var MainDate = props.MainDate
     var setMainDate = props.setMainDate
     var [DatesforCal, setDatesforCal] = useState<any[]>([]);
-    var [ActiveMonth, setActiveMonth] = useState(new Date());
+    var [Data, setData] = useState<any[]>([]);
 
     const firstDOW = startOfISOWeek(new Date());
     const shortWeekDaysArray = Array.from(Array(7)).map((e, i) =>
@@ -57,14 +59,46 @@ interface Props {
     var [CurrentEvents,setCurrentEvents] = useState<any[]>(events)
     var [FEvents,setFEvents] = useState<any[]>(events)
     var [DayorWeek,setDayorWeek] = useState('Day')
+    var [ExpandAll,setExpandAll] = useState(false)
 
     var [DateLabel,setDateLabel] = useState<any[]>([])
-    var [StartofMonth, setStartofMonth] = useState(
-      format(startOfMonth(new Date()), "i")
-    );
+
     var events2 = events
     var events4=events
     var events3=[]
+
+
+      function runClearData(){
+        setData([...[]])
+        document.querySelectorAll('input[type=checkbox]').forEach( (el:any) => el.checked = false );
+
+
+      }
+
+      function changeDateLabel(value:any){
+        if(value == 'This'){
+          var date = [...Array.from(new Set(CurrentEvents.map((event:any) => event.start_date )))]
+
+          date= date.filter(date1=> date1> format(startOfISOWeek(new Date()),'yyyy-MM-dd')  && date1 < format(startOfISOWeek(new Date()),'yyyy-MM-dd'))
+          date = date.sort((a:any,b:any)=> a > b ? 1 : -1)
+
+          setDateLabel([...date])
+
+        }
+
+        if(value == 'Next'){
+          var date = [...Array.from(new Set(CurrentEvents.map((event:any) => event.start_date )))]
+          console.log(date,format(addWeeks(startOfISOWeek(new Date()),1),'yyyy-MM-dd'))
+
+
+          date= date.filter(date1=> date1 >= format(addWeeks(startOfISOWeek(new Date()),1),'yyyy-MM-dd')  && date1 <= format(addWeeks(endOfISOWeek(new Date()),1),'yyyy-MM-dd'))
+          console.log(date)
+          date = date.sort((a:any,b:any)=> a > b ? 1 : -1)
+          setDateLabel([...date])
+
+        }
+
+      }
 
     function eventbody(event:any) {
       return `Take a look at this event from ${
@@ -94,20 +128,63 @@ interface Props {
     
     useEffect(() => {
         console.log(events)
-        if(DayorWeek == 'Day'){
+        var readyevents=[]
+        if(DayorWeek== 'Day'){
             events3= FEvents.filter((event:any)=>event.start_date == format(MainDate,'yyyy-MM-dd'))
             setDateLabel([...Array.from(new Set(events3.map((event:any) => event.start_date)))])
-
-            setCurrentEvents(events3)
+          if(CurrentFilters.length == 0){
+              readyevents = events3
+          } 
+          else if(CurrentFilters.length> 0){
+          for(var i =0;i<CurrentFilters.length;i++){
+              var events2 =FEvents
+            
+          if(CurrentFilters[i]['type'] == 'Event Type'){
+              events4= events2.filter((events1: { event_type: any[]; })=>events1.event_type !== null)
+  
+              readyevents.push(...events4.filter((events1: { event_type: any[]; })=>events1.event_type.includes(CurrentFilters[i]['name'])))
+          }
+  
+          else if(CurrentFilters[i]['type'] == 'Group Type'){
+              events4= events2.filter((events1: { group_type: any[]; })=>events1.group_type !== null)
+  
+              readyevents.push(...events4.filter((events1: { group_type: any[]; })=>events1.group_type.includes(CurrentFilters[i]['name'])))
+          }
+          }
+          }
+            setCurrentEvents([...readyevents])
         }
     
         else if(DayorWeek == 'Week'){
             events3= FEvents
+            var readyevents=[]
             var dateform=[...Array.from(new Set(events3.map((event:any) => event.start_date))).sort((a, b) => a > b ? 1 : -1)] 
 
 
-            setDateLabel(dateform)
-            setCurrentEvents(events3)
+            setDateLabel([...dateform])
+
+            if(CurrentFilters.length == 0){
+              readyevents = events3
+          } 
+          else if(CurrentFilters.length> 0){
+          for(var i =0;i<CurrentFilters.length;i++){
+              var events2 =FEvents
+            
+          if(CurrentFilters[i]['type'] == 'Event Type'){
+              events4= events2.filter((events1: { event_type: any[]; })=>events1.event_type !== null)
+  
+              readyevents.push(...events4.filter((events1: { event_type: any[]; })=>events1.event_type.includes(CurrentFilters[i]['name'])))
+          }
+  
+          else if(CurrentFilters[i]['type'] == 'Group Type'){
+              events4= events2.filter((events1: { group_type: any[]; })=>events1.group_type !== null)
+  
+              readyevents.push(...events4.filter((events1: { group_type: any[]; })=>events1.group_type.includes(CurrentFilters[i]['name'])))
+          }
+          }
+          }
+
+            setCurrentEvents([...readyevents])
             
     
          }
@@ -120,7 +197,7 @@ interface Props {
         } 
         else if(CurrentFilters.length> 0){
         for(var i =0;i<CurrentFilters.length;i++){
-
+            var events2 =FEvents
           
         if(CurrentFilters[i]['type'] == 'Event Type'){
             events4= events2.filter((events1: { event_type: any[]; })=>events1.event_type !== null)
@@ -151,7 +228,7 @@ interface Props {
                       Date/Time:
                     </div>
                     <div className="inline-block  ml-2 font-normal text-black">
-                      { format(parse(event.start_date,  "yyyy-MM-dd", new Date()),'MM/dd/yyyy')} at @ {event.start_time}
+                      { format(parse(event.start_date,  "yyyy-MM-dd", new Date()),'MM/dd/yyyy')} at @ {format(parse(event.start_time, "HH:mm", new Date()), "h:mm a")}
                     </div>
                   </div>
                   <div className="block">
@@ -169,22 +246,13 @@ interface Props {
                   </div>
                   <div className=" inline-block ml-2 font-normal text-black">
                     <div>{event.description.substring(0, 250)}...</div>
-                    <Link className="text-litecalendarblue font-semibold" href={`/`+city.slug+`/event/${event.permalink}`}>
-                        Show More Details
-                      
-                    </Link>
+
                   </div>
                 </div>
               </div>
   
               <div className="inline-block col-span-2 lg:col-span-1 justify-self-end">
-                {/*<button className='block m-2 p-2 bg-newnewblue text-white' onClick={() => window.open(`mailto:support@example.com?subject=Check%20Out%20This%20Event%20from%20SABusinessCalendar.com&body=${sharedeventencode}`) }
-                      title="support@example.com"> Share </button>     
-                <div className="block m-2 p-2 w-32 text-sm text-center bg-calendarblue text-white font-normal">
-                  Add to Calendar
-                </div>
-                  */}
-                {/*} <div className='block m-2 p-2 bg-newnewblue text-white'> <AddToCalendar event={sampevent}/></div>*/}
+
                 <button className="block m-4 p-2 w-24 md:w-32 text-center text-sm bg-calendarblue text-white">
                   <Link href={event.website} target="_blank">
                       Website
@@ -263,7 +331,7 @@ interface Props {
 
 
     function setShow(event:any) {
-      var events2 = FEvents;
+      var events2 = CurrentEvents;
       var findex =  (element:any) => element.id == event.id;
       findex = events.findIndex(findex)
       console.log(findex)
@@ -279,20 +347,56 @@ interface Props {
       
     }
 
+    function selecteddata(data:any){
+      var data2 = Data
+        data2.push(data)
+      setData([...data2])
+    }
+
+
+    function sendEmail(){
+      var body=''
+      for(var i =0;i<Data.length;i++){
+        body+=Data[i].name.replace(/&/g, '%26') + '%0D%0A' + 'Start Date: ' +  format(parse(Data[i].start_date,  "yyyy-MM-dd", new Date()),'MM/dd/yyyy') +' @ ' +Data[i].start_time + '%0D%0A' + 'Website: ' +window.location.host+'/'+city.slug+'/event/'+Data[i].permalink + '%0D%0A' +' %0D%0A%0D%0A'
+        
+      }
+
+      
+      window.open(
+        `mailto:?subject=Here's%20some%20event(s)%20you%20might%20find%20interesting%20` +
+          `&body=`+body
+      )
+      
+    }
+
+    useEffect(() => {
+      var events2 = CurrentEvents;
+      if (ExpandAll == true) {
+        for (var i = 0; i < events2.length; i++) {
+          events2[i]["show"] = true;
+        }
+      }
+      if (ExpandAll == false) {
+        for (var i = 0; i < events2.length; i++) {
+          events2[i]["show"] = false;
+        }
+      }
+      setCurrentEvents([...events2]);
+    }, [ExpandAll]);
 
     return (  
       <>
       
       <div
-            className="flex flex-auto flex-col overflow-auto pb-4" ><DayWeekFilter DayorWeek={DayorWeek} setDayorWeek={setDayorWeek}/>
-      <div className='grid grid-cols-3'><button className="bg-calendarblue text-white text-sm rounded m-2 col-span-1 p-2 lg:w-40  h-1/2 m-auto "> Send Selected Events</button>
-        <div className='col-span-2'><Filters setCurrentFilters={setCurrentFilters} CurrentFilters={CurrentFilters}/></div>
+            className="flex flex-auto flex-col overflow-auto pb-4" ><DayWeekFilter DayorWeek={DayorWeek} setDayorWeek={setDayorWeek} changeDateLabel={changeDateLabel} setMainDate={setMainDate} MainDate={MainDate} setExpandAll={setExpandAll} ExpandAll={ExpandAll}/>
+      <div className='grid grid-cols-3'><div className='col-span-2 lg:col-span-1 m-auto'><button onClick={()=>sendEmail()} className="bg-calendarblue text-white text-sm rounded m-2 lg:p-4 p-2"> Send Selected Events</button> {Data.length>0 && ( <button className='bg-litecalendarblue text-white text-sm rounded m-2 p-2 lg:p-4' onClick={()=>runClearData()}>Clear Selected</button> )}</div>
+        <div className='lg:col-span-2'><Filters setCurrentFilters={setCurrentFilters} CurrentFilters={CurrentFilters}/></div>
         </div> 
         {(DateLabel.length == 0)  && (
             <>
             <div className="text-center bg-calendarblue  p-2 font-bold text-white md:mb-8 mb-2 ">
             <div className="inline-block ml-2 mr-2 text-xl md:text-2xl w-72 md:w-96">
-            There&apos;s no events for this date {format(new Date(),'MM/dd/yyyy')}
+            There&apos;s No Events for the {DayorWeek}  {DayorWeek == 'Day' && (<>{format(MainDate,'MM/dd/yyyy')}</>)}
             </div></div>
             </>
 
@@ -321,7 +425,7 @@ interface Props {
                                 key={event._id}
                                 className="grid grid-cols-8 border-t-2 text-xl pt-2 md:p-2"
                               > 
-                                <div className="col-span-2 justify-self-center text-sm  md:text-base font-bold"><input className="mr-4" type={'checkbox'}/>
+                                <div className="col-span-2 justify-self-center text-sm  md:text-base font-bold"><input className="mr-4" onClick={()=>selecteddata(event)} type={'checkbox'}/>
                                   {format(
                                     parse(event.start_time, "HH:mm", new Date()),
                                     "h:mm a"
@@ -359,12 +463,10 @@ interface Props {
 
           <CalendarDisplay
             shortWeekDaysArray={shortWeekDaysArray}
-            StartofMonth={StartofMonth}
             events={events}
             setDatesforCal={setDatesforCal}
             MainDate={MainDate}
             setMainDate={setMainDate}
-            ActiveMonth={ActiveMonth}
             setDayorWeek={setDayorWeek}
 
             />

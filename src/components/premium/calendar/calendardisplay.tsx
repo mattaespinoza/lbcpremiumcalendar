@@ -16,7 +16,8 @@ import {
   getYear,
   addMonths,
   subMonths,
-  parse
+  parse,
+  setMonth
 } from "date-fns";
 
 
@@ -26,7 +27,7 @@ import {
 
 
   interface Props {
-    ActiveMonth:any,ChangeMonth:any,shortWeekDaysArray:any,StartofMonth:any,ChangeDate:any,events:any;
+   ChangeMonth:any,shortWeekDaysArray:any,ChangeDate:any,events:any;
     MainDate:any;
     setMainDate:any;
     setDayorWeek:any;
@@ -35,11 +36,10 @@ import {
 
 export default function CalendarDisplay(props:any) {
   var [Dates, setDates] = useState<any[]>([]);
+  var [ActiveMonth,setActiveMonth] = useState(new Date())
 
-    var ActiveMonth=props.ActiveMonth
     var ChangeMonth=props.ChangeMonth
     var shortWeekDaysArray=props.shortWeekDaysArray
-    var StartofMonth=props.StartofMonth
     var ChangeDate=props.ChangeDate
     var events=props.events
     var MainDate = props.MainDate
@@ -112,11 +112,13 @@ export default function CalendarDisplay(props:any) {
     return (
       <>
 
-<div className="hidden w-1/2 max-w-md flex-none border-l border-gray-100 py-10 px-8 md:block">
+<div className="hidden w-1/2 max-w-md flex-none border-l border-gray-100 py-10 px-8 lg:block">
                     <div className="flex items-center text-center text-gray-900">
                     <button
                         type="button"
                         className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-calendarblue hover:text-gray-500"
+                        onClick={()=>setActiveMonth(subMonths(ActiveMonth,1))}
+
                     >
                         <span className="sr-only">Previous month</span>
                         <ChevronLeft  className="h-5 w-5" aria-hidden="true" />
@@ -125,6 +127,7 @@ export default function CalendarDisplay(props:any) {
                     <button
                         type="button"
                         className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-calendarblue hover:text-gray-500"
+                        onClick={()=>setActiveMonth(addMonths(ActiveMonth,1))}
                     >
                         <span className="sr-only">Next month</span>
                         <ChevronRight  className="h-5 w-5" aria-hidden="true" />
@@ -138,7 +141,8 @@ export default function CalendarDisplay(props:any) {
                     )}
                     </div>
                     <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 border border-calendarblue text-sm shadow ring-1 ring-gray-200">
-                    {blankspace(StartofMonth)}
+                    {blankspace(format(startOfMonth(ActiveMonth), "i"))}
+
 
                     {Dates.map((day:any, dayIdx:any) => (
                         <button
@@ -146,14 +150,15 @@ export default function CalendarDisplay(props:any) {
                         type="button"
                         className={classNames(
                             'py-1.5 hover:bg-gray-100 focus:z-10 border-2',
-                            day.isCurrentMonth ? 'bg-white' : 'bg-gray-50',
-                            day.isToday && 'bg-gray-500',
+                            
+                            (day.isCurrentMonth && !day.isToday) ? 'bg-white' : 'bg-calendarblue',
+                            day.isToday && 'bg-calendarblue',
 
                             (day.isSelected || day.isToday) && 'font-semibold ',
                             day.isSelected && 'text-white',
                             !day.isSelected && day.isCurrentMonth && !day.isToday && 'text-gray-900',
                             !day.isSelected && !day.isCurrentMonth && !day.isToday && 'text-gray-400',
-                            day.isToday && !day.isSelected && 'text-white',
+                            day.isToday && !day.isSelected && 'text-white font-bold ',
                             day.Events > 0 &&   !day.isToday && !day.isSelected && 'text-litecalendarblue font-semibold',
                             day.isSelected && 'bg-calendarblue',
                             day.Events > 0 && day.isSelected && 'text-white',

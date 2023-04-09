@@ -1,7 +1,7 @@
 import format from "date-fns/format";
 import { parse } from "date-fns";
 import { ChevronDown } from "heroicons-react";
-import React, {Fragment,useState } from 'react';
+import React, {Fragment,useEffect,useState } from 'react';
 import { Dialog, Disclosure, Menu, Popover, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
@@ -11,31 +11,7 @@ const sortOptions = [
   { name: 'Best Rating', href: '#' },
   { name: 'Newest', href: '#' },
 ]
-const filters = [
-  {
-    id: 'event_type',
-    name: 'Event Type',
-    options: [
-      { value: 'Networking', label: 'Networking' },
-      { value: 'Educational', label: 'Educational' },
-      { value: 'Combination', label: 'Combination' },
-      { value: 'Other', label: 'Other' },
 
-    ],
-  },
-  {
-    id: 'group_type',
-    name: 'Organization Type',
-    options: [
-      { value: 'Dedicated Networking', label: 'Dedicated Networking' },
-      { value: 'Resource/Gov/Edu', label: 'Resource/Gov/Edu' },
-      { value: 'Business/Industry', label: 'Business/Industry' },
-      { value: 'Chambers', label: 'Chambers' },
-
-    ],
-  },
- 
-]
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
@@ -50,20 +26,97 @@ interface Props {
 }
 
 
+const holdfilters = [
+  {
+    id: 'event_type',
+    name: 'Event Type',
+    options: [
+      { value: 'Networking', label: 'Networking',checked:false},
+      { value: 'Educational', label: 'Educational',checked:false },
+      { value: 'Combination', label: 'Combination',checked:false},
+      { value: 'Other', label: 'Other',checked:false},
+
+    ],
+  },
+  {
+    id: 'group_type',
+    name: 'Organization Type',
+    options: [
+      { value: 'Dedicated Networking', label: 'Dedicated Networking',checked:false },
+      { value: 'Resource/Gov/Edu', label: 'Resource/Gov/Edu',checked:false },
+      { value: 'Business/Industry', label: 'Business/Industry',checked:false },
+      { value: 'Chambers', label: 'Chambers',checked:false},
+
+    ],
+  },
+
+]
+
+const filters = [
+  {
+    id: 'event_type',
+    name: 'Event Type',
+    options: [
+      { value: 'Networking', label: 'Networking',checked:false},
+      { value: 'Educational', label: 'Educational',checked:false },
+      { value: 'Combination', label: 'Combination',checked:false},
+      { value: 'Other', label: 'Other',checked:false},
+
+    ],
+  },
+  {
+    id: 'group_type',
+    name: 'Organization Type',
+    options: [
+      { value: 'Dedicated Networking', label: 'Dedicated Networking',checked:false },
+      { value: 'Resource/Gov/Edu', label: 'Resource/Gov/Edu',checked:false },
+      { value: 'Business/Industry', label: 'Business/Industry',checked:false },
+      { value: 'Chambers', label: 'Chambers',checked:false},
+
+    ],
+  },
+
+]
 
   export default function Filters(props:any) 
     {
-        const [open, setOpen] = useState(false)
-        var setCurrentFilters=props.setCurrentFilters
-        var CurrentFilters=props.CurrentFilters
+      const [AllFilters, setAllFilters] = useState<any[]>([])
+      const [ResetFilters, setResetFilters] = useState<any[]>([])
+
+      const [open, setOpen] = useState(false)
+      var setCurrentFilters=props.setCurrentFilters
+      var CurrentFilters=props.CurrentFilters
+      function runFilterChange(name:any,value:any,type:any){
+        var filter2 = AllFilters
+        console.log(type)
+        var typenum = filter2.findIndex(x => x.name ===type)
+        var optionfilter=filter2[typenum].options.findIndex((x:any) => x.value ===name)
+
+        filter2[typenum]['options'][optionfilter].checked = value 
+        console.log(value)
+        setAllFilters([...filter2])
+
+
+      }
+        useEffect(() => {
+
+
+          setResetFilters([...holdfilters])
+
+          setAllFilters([...filters])
+        },[]);
+
+
 
 
         function runFilter(name:any,value:any,type:any){
           if(value == true){
+            
           var CFilter = CurrentFilters 
          CFilter.push({name:name,type:type})
-          console.log(name)
+          console.log(name,value)
         setCurrentFilters([...CFilter])          
+        runFilterChange(name,value,type)
           }
 
 
@@ -78,8 +131,8 @@ interface Props {
             }
             setCurrentFilters([...CFilter])          
             }
-            console.log(CFilter,'hold')
-        }
+            runFilterChange(name,value,type)
+          }
 
       return (
         <> 
@@ -124,7 +177,7 @@ interface Props {
 
                 {/* Filters */}
                 <form className="mt-4">
-                  {filters.map((section) => (
+                  {AllFilters.map((section:any,sectionIdx:any) => (
                     <Disclosure as="div" key={section.name} className="border-t border-gray-200 px-4 py-6">
                       {({ open }) => (
                         <>
@@ -141,14 +194,17 @@ interface Props {
                           </h3>
                           <Disclosure.Panel className="pt-6">
                             <div className="space-y-6">
-                              {section.options.map((option, optionIdx) => (
+                              {section.options.map((option:any, optionIdx:any) => (
                                 <div key={option.value} className="flex items-center">
                                   <input
                                     id={`filter-mobile-${section.id}-${optionIdx}`}
                                     name={`${section.id}[]`}
-                                    defaultValue={option.value}
+                                    value={option.value}
+                                    checked={option.checked} 
                                     type="checkbox"
                                     className="h-4 w-4 rounded border-gray-300 text-calendarblue focus:ring-litecalendarblue"
+                                    onClick={(e:any)=>(runFilter(option.value, e.target.checked,section.name)) }
+
                                   />
                                   <label
                                     htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
@@ -160,6 +216,9 @@ interface Props {
                               ))}
                             </div>
                           </Disclosure.Panel>
+                          {(sectionIdx == AllFilters.length-1 && CurrentFilters.length >0 ) &&(
+                                <button className='mt-8 bg-litecalendarblue text-white p-2 ml-2 rounded-lg' onClick={()=>{setCurrentFilters([...[]]);setAllFilters([...ResetFilters]);console.log(ResetFilters)}} >Clear Filters</button>
+                                )}
                         </>
                       )}
                     </Disclosure>
@@ -223,7 +282,7 @@ interface Props {
             </button>
 
             <Popover.Group className="hidden sm:flex sm:items-baseline sm:space-x-4">
-              {filters.map((section, sectionIdx) => (
+              {AllFilters.map((section:any, sectionIdx:any) => (
                 <Popover
                   as="div"
                   key={section.name}
@@ -239,7 +298,11 @@ interface Props {
                         aria-hidden="true"
                       />
                     </Popover.Button>
+                    {(sectionIdx == AllFilters.length-1 && CurrentFilters.length >0 ) &&(
+                    <button className='bg-litecalendarblue text-white p-2 ml-2 rounded-lg' onClick={()=>{setCurrentFilters([...[]]);setAllFilters([...ResetFilters]);console.log(ResetFilters)}} >Clear Filters</button>
+                    )}
                   </div>
+                  
                   <Transition
                     as={Fragment}
                     enter="transition ease-out duration-100"
@@ -251,15 +314,16 @@ interface Props {
                   >
                     <Popover.Panel className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <form className="space-y-4">
-                        {section.options.map((option, optionIdx) => (
+                        {section.options.map((option:any, optionIdx:any) => (
                           <div key={option.value} className="flex items-center">
                             <input
                               id={`filter-${section.id}-${optionIdx}`}
                               name={`${section.id}[]`}
-                              defaultValue={option.value}
+                              value={option.value}
+                              checked={option.checked} 
                               type="checkbox"
                               className="h-4 w-4 rounded border-gray-300 text-calendarblue focus:ring-litecalendarblue"
-                              onClick={(e:any)=>(runFilter(option.value, e.target.checked,section.name))}
+                              onClick={(e:any)=>(runFilter(option.value, e.target.checked,section.name)) }
                             />
                             <label
                               htmlFor={`filter-${section.id}-${optionIdx}`}
