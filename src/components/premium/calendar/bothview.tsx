@@ -331,16 +331,15 @@ interface Props {
 
 
     function setShow(event:any) {
-      var events2 = FEvents;
+      var events2 = CurrentEvents;
       var findex =  (element:any) => element.id == event.id;
-      findex = events.findIndex(findex)
-      console.log(findex)
+      var index3 = events2.findIndex(findex)
 
-      if (events2[Number(findex)]["show"] == true) {
-        events2[Number(findex)]["show"] = false;
+      if (events2[Number(index3)]["show"] == true) {
+        events2[Number(index3)]["show"] = false;
         setCurrentEvents([...events2]);
-      } else if (events2[Number(findex)]["show"] == false) {
-        events2[Number(findex)]["show"] = true;
+      } else if (events2[Number(index3)]["show"] == false) {
+        events2[Number(index3)]["show"] = true;
         setCurrentEvents([...events2]);
 
       }
