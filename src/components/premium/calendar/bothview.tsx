@@ -331,7 +331,7 @@ interface Props {
 
 
     function setShow(event:any) {
-      var events2 = CurrentEvents;
+      var events = CurrentEvents;
       var findex =  (element:any) => element.id == event.id;
       findex = events.findIndex(findex)
       console.log(findex)
