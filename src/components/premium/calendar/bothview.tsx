@@ -56,7 +56,7 @@ interface Props {
     
 
     var [CurrentFilters,setCurrentFilters] = useState<any[]>([])
-    var [CurrentEvents,setCurrentEvents] = useState<any[]>(events)
+    var [CurrentEvents,setCurrentEvents] = useState<any[]>([events])
     var [FEvents,setFEvents] = useState<any[]>(events)
     var [DayorWeek,setDayorWeek] = useState('Day')
     var [ExpandAll,setExpandAll] = useState(false)
@@ -331,7 +331,7 @@ interface Props {
 
 
     function setShow(event:any) {
-      var events = CurrentEvents;
+      var events2 = FEvents;
       var findex =  (element:any) => element.id == event.id;
       findex = events.findIndex(findex)
       console.log(findex)
