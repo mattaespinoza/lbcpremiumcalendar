@@ -46,7 +46,7 @@ const PremiumCalendar: NextPage<Props> = (props) => {
 export async function getStaticProps(context:any ) {
   const city = await supabase.from('cities').select('name,business_calendar,website,email,slug').eq('slug',context.params.city)
     //must change this to no dupes
-    const events = await supabase.from('preview_events').select('*').eq('city_calendar',city.data![0].name).gt('start_date','04/08/2023')
+    const events = await supabase.from('events').select('*').eq('city_calendar',city.data![0].name)
   return {
     props: { city: JSON.parse(JSON.stringify(city.data![0])),events: JSON.parse(JSON.stringify(events.data))},
     // Next.js will attempt to re-generate the page:
