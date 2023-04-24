@@ -17,10 +17,14 @@ interface Props {
 const Home: NextPage<Props> = (props) => {
     var city=props.city
     var events = props.events
+    
 
   return (
     <>
      <div className='text-2xl'>test</div>
+
+
+
     </>
   )
 }
