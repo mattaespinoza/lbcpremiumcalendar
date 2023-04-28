@@ -218,7 +218,8 @@ interface Props {
         }
 
         else if(CurrentFilters[i]['type'] == 'Search'){
-          events4= events2.filter((events1: { name: any; })=>events1.name.toLowerCase().includes(CurrentFilters[i]['name'].toLowerCase()))
+          events4= events2.filter((events1: { description: any;name: any; })=>events1.description.toLowerCase().includes(CurrentFilters[i]['name'].toLowerCase()) || events1.name.toLowerCase().includes(CurrentFilters[i]['name'].toLowerCase()) )
+
           console.log(events4.length,'hi')
           events3 =events4
       }
@@ -257,7 +258,7 @@ interface Props {
                     Description:
                   </div>
                   <div className=" inline-block ml-2 font-normal text-black">
-                    <div>{event.description.substring(0, 250)}...</div>
+                    <div>{event.description.substring(0, 500)}...</div>
 
                   </div>
                 </div>
