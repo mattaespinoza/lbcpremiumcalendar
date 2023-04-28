@@ -362,7 +362,7 @@ const filters = [
                 </Popover>
               ))}
             </Popover.Group>
-             <div className="ml-4 inline-block"><label>Search:</label> <input onChange={(e:any)=>(runFilter(e.target.value,'Search','Search'))} className='w-24 lg:w-40' type='text'/></div> 
+             <div className="ml-4 inline-block"><label>Title Search:</label> <input onChange={(e:any)=>(runFilter(e.target.value,'Search','Search'))} className='w-24 lg:w-40' type='text'/></div> 
           </div>
         </section> 
       </div>
