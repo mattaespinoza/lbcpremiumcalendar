@@ -34,7 +34,7 @@ const PremiumCalendar: NextPage<Props> = (props) => {
           <div className="bg-gray-200">
             <div className="xl:w-10/12 m-auto border-2">
               <Calendar events={events} city={city} />
-
+             <div className='text-xl'> *Disclaimer: The Events on this Calendar are Updated with the Following Week's Events Every Sunday Evening</div>
             </div>
           </div>
 
