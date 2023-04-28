@@ -368,7 +368,7 @@ interface Props {
     function sendEmail(){
       var body=''
       for(var i =0;i<Data.length;i++){
-        body+=Data[i].name.replace(/&/g, '%26') + '%0D%0A' + 'Start Date: ' +  format(parse(Data[i].start_date,  "yyyy-MM-dd", new Date()),'MM/dd/yyyy') +' @ ' +Data[i].start_time + '%0D%0A' + 'Website: ' +window.location.host+'/'+city.slug+'/event/'+Data[i].permalink + '%0D%0A' +' %0D%0A%0D%0A'
+        body+=Data[i].name.replace(/&/g, '%26') + '%0D%0A' + 'Start Date: ' +  format(parse(Data[i].start_date,  "yyyy-MM-dd", new Date()),'MM/dd/yyyy') +' @ ' +Data[i].start_time + '%0D%0A' + 'Website: ' +'https://'+window.location.host+'/'+city.slug+'/event/'+Data[i].permalink + '%0D%0A' +' %0D%0A%0D%0A'
         
       }
 
