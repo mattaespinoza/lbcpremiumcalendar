@@ -40,7 +40,7 @@ const holdfilters = [
   },
   {
     id: 'group_type',
-    name: 'Organization Type',
+    name: 'Group Type',
     options: [
       { value: 'Dedicated Networking', label: 'Dedicated Networking',checked:false },
       { value: 'Resource/Gov/Edu', label: 'Resource/Gov/Edu',checked:false },
@@ -66,7 +66,7 @@ const filters = [
   },
   {
     id: 'group_type',
-    name: 'Organization Type',
+    name: 'Group Type',
     options: [
       { value: 'Dedicated Networking', label: 'Dedicated Networking',checked:false },
       { value: 'Resource/Gov/Edu', label: 'Resource/Gov/Edu',checked:false },
@@ -85,6 +85,7 @@ const filters = [
 
       const [open, setOpen] = useState(false)
       var setCurrentFilters=props.setCurrentFilters
+
       var CurrentFilters=props.CurrentFilters
       function runFilterChange(name:any,value:any,type:any){
         var filter2 = AllFilters
@@ -108,9 +109,8 @@ const filters = [
 
 
 
-
         function runFilter(name:any,value:any,type:any){
-          if(value == true){
+          if(value == true ){
             
           var CFilter = CurrentFilters 
          CFilter.push({name:name,type:type})
@@ -130,12 +130,35 @@ const filters = [
               CFilter.splice(index, 1); // 2nd parameter means remove one item only
             }
             setCurrentFilters([...CFilter])          
-            }
             runFilterChange(name,value,type)
+
+          }
+
+
+          else if(type=='Search' ){
+              var CFilter = CurrentFilters
+              var index = CFilter.findIndex((item:any)=> item.type === 'Search');
+              if(index >=0){
+                CFilter[index]['name']=name 
+              }
+              else{
+                CFilter.push({name:name,type:type})
+
+              }
+              console.log(CFilter)
+             setCurrentFilters([...CFilter])          
+          
+
+
+
+          }
+            
           }
 
       return (
         <> 
+
+
            <div className=" inline-block ">
       {/* Mobile filter dialog */}
       <Transition.Root show={open} as={Fragment}>
@@ -339,8 +362,9 @@ const filters = [
                 </Popover>
               ))}
             </Popover.Group>
+             <div className="ml-4 inline-block"><label>Search:</label> <input onChange={(e:any)=>(runFilter(e.target.value,'Search','Search'))} className='w-24 lg:w-40' type='text'/></div> 
           </div>
-        </section>
+        </section> 
       </div>
     </div>
       </>

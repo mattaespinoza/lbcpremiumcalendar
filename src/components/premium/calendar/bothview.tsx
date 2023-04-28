@@ -123,14 +123,16 @@ interface Props {
           events4[i]['show']=false
         }
         setFEvents([...events4])
-  
+        setMainDate(new Date())
        },[]);
     
     useEffect(() => {
         console.log(events)
         var readyevents=[]
         if(DayorWeek== 'Day'){
-            events3= FEvents.filter((event:any)=>event.start_date == format(MainDate,'yyyy-MM-dd'))
+
+
+          events3= FEvents.filter((event:any)=>event.start_date == format(MainDate,'yyyy-MM-dd'))
             setDateLabel([...Array.from(new Set(events3.map((event:any) => event.start_date)))])
           if(CurrentFilters.length == 0){
               readyevents = events3
@@ -150,6 +152,9 @@ interface Props {
   
               readyevents.push(...events4.filter((events1: { group_type: any[]; })=>events1.group_type.includes(CurrentFilters[i]['name'])))
           }
+
+
+
           }
           }
             setCurrentEvents([...readyevents])
@@ -188,6 +193,7 @@ interface Props {
             
     
          }
+
         },[DayorWeek,MainDate]);
 
     useEffect(() => {
@@ -210,6 +216,12 @@ interface Props {
 
             events3.push(...events4.filter((events1: { group_type: any[]; })=>events1.group_type.includes(CurrentFilters[i]['name'])))
         }
+
+        else if(CurrentFilters[i]['type'] == 'Search'){
+          events4= events2.filter((events1: { name: any; })=>events1.name.toLowerCase().includes(CurrentFilters[i]['name'].toLowerCase()))
+          console.log(events4.length,'hi')
+          events3 =events4
+      }
         }
         }
         setCurrentEvents(events3)
