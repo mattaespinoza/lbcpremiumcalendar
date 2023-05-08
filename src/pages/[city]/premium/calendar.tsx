@@ -25,12 +25,11 @@ interface Props {
 const PremiumCalendar: NextPage<Props> = (props) => {
     var city=props.city
     var events = props.events
-
-
+//test
 
   return (
     <>
-
+    
           <div className="bg-gray-200">
             <div className="xl:w-10/12 m-auto border-2">
               <Calendar events={events} city={city} />
