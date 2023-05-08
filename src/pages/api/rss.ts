@@ -17,6 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { data: events, error } = await supabase
     .from('events')
     .select('*')
+    .eq('city_calendar','San Antonio')
     .order('start_time', { ascending: true });
 
   if (error) {
