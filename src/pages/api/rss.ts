@@ -44,7 +44,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       description: event.description,
       id: event.id.toString(),
       link: `https://example.com/events/${event.id}`,
-      date: new Date(event.start_time),
+      date: new Date(event.start_date),
       author: [{ name: 'Your Name', email: 'your-email@example.com' }],
     });
   });
