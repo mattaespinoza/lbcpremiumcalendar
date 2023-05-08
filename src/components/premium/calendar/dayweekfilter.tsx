@@ -25,6 +25,7 @@ setMainDate:any;
 MainDate:any;
 setExpandAll:any;
 ExpandAll:any;
+subscription:any;
 
 }
 
@@ -38,6 +39,7 @@ ExpandAll:any;
     var MainDate=props.MainDate
     var setExpandAll=props.setExpandAll
     var ExpandAll = props.ExpandAll
+    var subscription = props.subscription
 
     return (
         <> 
@@ -103,14 +105,14 @@ ExpandAll:any;
                 </button>
               </div>
             )}
-  
+      {subscription !=='Free' && (
             <div
               className="m-2 p-2 flex items-center rounded-md shadow-sm md:items-stretch border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
                 onClick={()=>setDayorWeek('Week')}
             >
               Week
             </div>
-  
+            )}
             <div
               className=" p-2 flex items-center rounded-md shadow-sm md:items-stretch border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
               onClick={()=>setDayorWeek('Day')}

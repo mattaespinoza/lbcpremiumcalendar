@@ -36,6 +36,7 @@ interface Props {
     type:any;
     MainDate:any;
     setMainDate:any;
+    subscription:any;
 
 
   }
@@ -46,6 +47,8 @@ interface Props {
     var type =props.type
     var MainDate = props.MainDate
     var setMainDate = props.setMainDate
+    var subscription = props.subscription
+
     var [DatesforCal, setDatesforCal] = useState<any[]>([]);
     var [Data, setData] = useState<any[]>([]);
 
@@ -400,7 +403,7 @@ interface Props {
       <>
       
       <div
-            className="flex flex-auto flex-col overflow-auto pb-4" ><DayWeekFilter DayorWeek={DayorWeek} setDayorWeek={setDayorWeek} changeDateLabel={changeDateLabel} setMainDate={setMainDate} MainDate={MainDate} setExpandAll={setExpandAll} ExpandAll={ExpandAll}/>
+            className="flex flex-auto flex-col overflow-auto pb-4" ><DayWeekFilter DayorWeek={DayorWeek} setDayorWeek={setDayorWeek} changeDateLabel={changeDateLabel} setMainDate={setMainDate} MainDate={MainDate} setExpandAll={setExpandAll} ExpandAll={ExpandAll} subscription={subscription}/>
       <div className='grid grid-cols-3'><div className='col-span-2 lg:col-span-1 m-auto'><button onClick={()=>sendEmail()} className="bg-calendarblue text-white text-sm rounded m-2 lg:p-4 p-2"> Send Selected Events</button> {Data.length>0 && ( <button className='bg-litecalendarblue text-white text-sm rounded m-2 p-2 lg:p-4' onClick={()=>runClearData()}>Clear Selected</button> )}</div>
         <div className='lg:col-span-2'><Filters setCurrentFilters={setCurrentFilters} CurrentFilters={CurrentFilters}/></div>
         </div> 

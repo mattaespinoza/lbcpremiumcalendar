@@ -26,12 +26,15 @@ import BothView from "./bothview";
 interface Props {
 
   events:any,
-  city:any
+  city:any,
+  subscription:any,
 }
   export default function Calendar(props:any) 
   {
     var events=props.events
     var city=props.city
+    var subscription=props.subscription
+
     const [FullEvents, setFullEvents] = useState<any[]>(events);
 
 
@@ -57,6 +60,7 @@ interface Props {
               city={city}
               MainDate={MainDate}
               setMainDate={setMainDate}
+              subscription={subscription}
             />
 
 
