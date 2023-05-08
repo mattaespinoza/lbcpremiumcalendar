@@ -40,10 +40,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   events.forEach((event) => {
     feed.addItem({
-      title: event.title,
+      title: event.name,
       description: event.description,
       id: event.id.toString(),
-      link: `https://example.com/events/${event.id}`,
+      link: event.website,
       date: new Date(event.start_date),
       author: [{ name: 'Your Name', email: 'your-email@example.com' }],
     });
