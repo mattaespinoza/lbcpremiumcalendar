@@ -25,6 +25,7 @@ interface Props {
 const PremiumCalendar: NextPage<Props> = (props) => {
     var city=props.city
     var events = props.events
+    
 //test
 
   return (

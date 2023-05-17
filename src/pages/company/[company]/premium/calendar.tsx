@@ -36,9 +36,7 @@ const PremiumCalendar: NextPage<Props> = (props) => {
           <div className="bg-gray-200">
             <div className="xl:w-10/12 m-auto border-2">
 
-              <Image className='m-auto mt-4' alt="logo of amana heating and air conditioning" width={400} height={400} src={company['top_ad']}/>
               <Calendar events={events} city={city} />
-              <Image className='m-auto mt-4 mb-12' alt="logo of amana heating and air conditioning" width={400} height={400} src={company['bottom_ad']}/>
   
             </div>
           </div>
